@@ -45,7 +45,7 @@ void GSM::sendPayload(String payload)
   sim800l->doPost(URL, CONTENT_TYPE, postPayload, 10000, 10000);
 }
 
-uint8_t GSM::getSignalStrenght() 
+uint8_t GSgetSignalStrenght() 
 {
   return sim800l->getSignal();
 }

@@ -4,8 +4,9 @@
 #include <map>
 #include "PowerManagement.h"
 
-#define RECEIVER_DATA_PIN_NUMBER 2
+#define RECEIVER_DATA_PIN_NUMBER 13
 #define RECEIVER_POWER_PIN_NUMBER 12
+#define RECEIVER_CS_PIN_NUMBER 14
 
 struct Windy
 {  
@@ -42,20 +43,26 @@ public:
   void enable()
   {
     pinMode(RECEIVER_DATA_PIN_NUMBER, INPUT);
+    
     pinMode(RECEIVER_POWER_PIN_NUMBER, OUTPUT);
+    pinMode(RECEIVER_CS_PIN_NUMBER, OUTPUT);
     digitalWrite(RECEIVER_POWER_PIN_NUMBER, HIGH);
+    digitalWrite(RECEIVER_CS_PIN_NUMBER, HIGH);
   }
 
   void disable()
   {
+    pinMode(RECEIVER_CS_PIN_NUMBER, OUTPUT);
     pinMode(RECEIVER_POWER_PIN_NUMBER, OUTPUT);
     digitalWrite(RECEIVER_POWER_PIN_NUMBER, LOW);
+    digitalWrite(RECEIVER_CS_PIN_NUMBER, LOW);
   }
 
   void receive()
   {
     VentusDecoder * ventus = new VentusDecoder(); 
-    
+    PowerManagement powerManagement;
+  
     int state = 0;
     word last = 0;
     word pulse = 0;
@@ -77,7 +84,7 @@ public:
         if (p != 0)
         {
 
-          if (isDecodingFinished() || (millis() - time > 120000)) {
+          if (isDecodingFinished() || (millis() - time > 400000)) {
               delete ventus;
               break;
           }
@@ -90,8 +97,11 @@ public:
               char result[data.size()];
 		          std::copy(data.begin(), data.end(), result);
               decodeWindData(result);
+                
+              powerManagement.planWakeUpAfter(25 * 1000000ULL);
+              powerManagement.startLightSleep();      
             }
-          
+
             ventus->resetDecoder();
           }
         }

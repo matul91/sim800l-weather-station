@@ -1,4 +1,5 @@
 #include "PowerManagement.h"
+#include "IP5306.cpp"
 #include "GSM.h"
 #include "Measurements/Measurements.h"
 #include "PayloadFactory/PayloadFactory.h"
@@ -12,8 +13,9 @@ void loop() {
 
   PowerManagement powerManagement;
   powerManagement.init();
-  powerManagement.enablePowerBoost();
-  
+  Serial.println(powerManagement.enablePowerBoost());
+  IP5306_SetLightLoadShutdownTime(3);
+
   Measurements measurements;
   WeatherStationStatus status = measurements.getAll();
 
@@ -27,7 +29,7 @@ void loop() {
   gsm.sendPayload(payload);
 
   uint64_t uptime = (micros() - wakeupTime) * 1ULL;
-  uint64_t sleepTime = (ONE_HOUR * 1000000ULL) - uptime;
+  uint64_t sleepTime = (THIRTY_MINUTES * 1000000ULL) - uptime;
 
   powerManagement.planWakeUpAfter(sleepTime);
   powerManagement.startDeepSleep();

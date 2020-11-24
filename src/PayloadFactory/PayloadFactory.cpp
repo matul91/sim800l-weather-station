@@ -29,7 +29,7 @@ const char *query = R""""(
   json["operationName"] = "saveWeatherData";
 
   JsonObject variables = json.createNestedObject("variables");
-  variables["speed"] = status.wind.speed;
+  variables["speed"] = status.wind.gust;
   variables["direction"] = status.wind.direction;
   variables["temperature"] = status.temperature.external;
   variables["humidity"] = status.humidity.external;

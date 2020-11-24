@@ -50,7 +50,6 @@ WeatherStationStatus Measurements::getAll() {
   
   status = Measurements::recordVoltage(status);
   status = Measurements::recordFromPressureSensor(status);
- 
   status = Measurements::recordFromWindSensor(status);
 
   return status;

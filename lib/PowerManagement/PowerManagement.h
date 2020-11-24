@@ -8,6 +8,7 @@
 
 #define uS_TO_S_CONVERSION_FACTOR   1000000ULL 
 #define ONE_HOUR                    3600
+#define THIRTY_MINUTES              1800
 
 #ifndef _POWER_MANAGEMENT_H_
 #define _POWER_MANAGEMENT_H_
